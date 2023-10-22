@@ -180,6 +180,60 @@ sr.reveal('.text-pr', {
 //   }
 // }
 
+var to = "sirimesylvestrejean@gmail.com";
+            var subject = "Nouveau Message";
+
+            document.getElementById('sub').addEventListener('click', function(event) {
+
+            var nom = document.getElementById('name').value;
+            var email = document.getElementById('email').value;
+            var telephone = document.getElementById('telephone').value;
+
+            var message = "Nom : " + nom + "\nEmail : " + email+  "\nTelephone : " + telephone + "\n\n" + document.getElementById('message').value;
+
+            // Vérifier si l'e-mail est valide
+            if (!validateEmail(email)) {
+            alert('Adresse e-mail non valide.');
+            return; // Arrêter l'exécution de la fonction
+            }
+
+            fetch('https://codingmailer.onrender.com/send-email', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+            to: to,
+            subject: subject,
+            message: message
+            })
+            })
+            .then(function(response) {
+            if (response.ok) {
+            alert('E-mail envoyé avec succès.');
+            // Réinitialiser les champs du formulaire
+            document.getElementById('name').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('telephone').value = '';
+            document.getElementById('message').value = '';
+            } else {
+            response.json().then(function(data) {
+            var errorMessage = data && data.message ? data.message : 'Erreur lors de l\'envoi de l\'e-mail.';
+            alert('Erreur : ' + errorMessage);
+            });
+            }
+            })
+            .catch(function(error) {
+                alert('E-mail envoyé avec succès.');
+            });
+            });
+
+            // Fonction de validation de l'e-mail
+            function validateEmail(email) {
+            var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+            }
+
 
 
 
